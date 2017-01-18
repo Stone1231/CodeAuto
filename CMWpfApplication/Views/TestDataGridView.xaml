@@ -1,0 +1,56 @@
+﻿<Window x:Class="CMWpfApplication.TestDataGridView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CMWpfApplication"
+        mc:Ignorable="d"
+        xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro.Platform"
+        Title="TestDataGrid" Height="300" Width="300">
+    <Window.Resources>
+        <local:TestDataGridViewModel x:Key="viewModel" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Button cal:Message.Attach="[Event Click] = [Action AddData()]" Content="Add" />
+
+        <DataGrid 
+            Grid.Row="1"
+            x:Name="ObCollection" 
+            CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Text"
+                    Binding="{Binding Text}" />
+                <DataGridComboBoxColumn 
+                    Header="SelectValue"
+                    ItemsSource="{Binding Source={StaticResource viewModel}, Path=ComboBoxList}"
+                    DisplayMemberPath="Text"
+                    SelectedValuePath="Value"
+                    SelectedValueBinding="{Binding SelectValue}" />
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button cal:Message.Attach="[Event Click] = [Action ReadData($dataContext)]">Details</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button cal:Message.Attach="[Event Click] = [Action DeleteData($dataContext)]">Delete</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>                
+            </DataGrid.Columns>
+
+            <!--cal:Message.Attach="[Event Click] = [Action DeleteFileCloud($dataContext)]"-->
+        </DataGrid>
+
+    </Grid>
+</Window>
